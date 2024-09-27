@@ -1,6 +1,3 @@
-using Game.MVP;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,18 +5,24 @@ namespace Game.MVP
 {
     public abstract class View : MonoBehaviour
     {
-        protected Presenter _precenter;
+        protected Presenter _presenter;
 
         [SerializeField] private Text _helthText;
+        [SerializeField] private Text _defenceText;
 
         public virtual void Init(Presenter precenter)
         {
-            _precenter = precenter;
+            _presenter = precenter;
         }
 
-        public void UpdateHealth(int damage)
+        public void UpdateHealth(int value)
         {
-            _helthText.text = $"Damage: {damage}";
+            _helthText.text = $"{value}";
+        }
+
+        public void UpdateDefence(int value)
+        {
+            _defenceText.text = $"{value}";
         }
     }
 }

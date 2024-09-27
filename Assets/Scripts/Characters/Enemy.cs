@@ -1,21 +1,40 @@
-using System.Collections;
-using System.Collections.Generic;
+using Game.MVP;
 using UnityEngine;
+using System.Collections;
 
-namespace CharacterSettings.Enemy
+namespace Characters
 {
-    public class Enemy : Character
+    public class Enemy : CharacterSettings, IService
     {
-        // Start is called before the first frame update
-        void Start()
-        {
+        private CharacterSettings _player;
 
+        public override void Init(Presenter presenter)
+        {
+            base.Init(presenter);
+            _player = ServiceLocator.Current.Get<Player>();
         }
 
-        // Update is called once per frame
-        void Update()
+        public override void AttackDice()
         {
+            base.AttackDice();    
+        }
 
+        public override void TakeDamage(int damage)
+        {
+            base.TakeDamage(damage);
+            if(_health <= 0)
+            {
+                _fight.EnemyDie();
+            }
+        }
+
+        public IEnumerator EnemyAttacked()
+        {
+            yield return new WaitForSeconds(3);
+            RerolDice();
+            yield return new WaitForSeconds(3);
+            _fight.EnemyStepEnd();
+            yield break;
         }
     }
 }

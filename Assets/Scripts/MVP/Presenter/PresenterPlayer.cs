@@ -1,24 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using CharacterSettings;
+using Characters;
 
 namespace Game.MVP
 {
     public class PresenterPlayer : Presenter
     {
-        public PresenterPlayer(Character character, View view) : base(character, view)
-        {
+        private Player _playerModel;
+        private ViewPlayer _viewPlayer;
+        private Fight _fight;
 
-        }
-        public override void SetAttack()
+        public PresenterPlayer(Player character, ViewPlayer view ) : base( character, view )
         {
-            throw new System.NotImplementedException();
+            _playerModel = character;
+            _viewPlayer = view;
+            _viewPlayer.UpdateCountRerol(_playerModel.CountRerol);
+            _fight = ServiceLocator.Current.Get<Fight>();
         }
 
         public override void ShakeDice()
         {
-            throw new System.NotImplementedException();
+            if (_fight.CheckStep())
+            {
+                base.ShakeDice();
+                _viewPlayer.UpdateCountRerol(_playerModel.CountRerol);
+            }
+        }
+
+        public override void SetAttack()
+        {
+            if (_fight.CheckStep())
+            {
+                base.SetAttack();
+                _viewPlayer.UpdateCountRerol(_playerModel.CountRerol);
+            }
         }
     }
 }

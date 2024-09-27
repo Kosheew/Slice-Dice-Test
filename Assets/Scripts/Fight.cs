@@ -1,18 +1,54 @@
-using System.Collections;
-using System.Collections.Generic;
+using Characters;
 using UnityEngine;
 
-public class Fight : MonoBehaviour
+namespace Game
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Fight : MonoBehaviour, IService
     {
-        
-    }
+        private Enemy _enemy;
+        private Player _player;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private bool StepPlayer;
+
+        public void Init()
+        {
+            StepPlayer = true;
+            _enemy = ServiceLocator.Current.Get<Enemy>();
+            _player = ServiceLocator.Current.Get<Player>();
+        }
+
+        public void PlayerStep()
+        {
+            StepPlayer = false;
+            _player.CheckDice(_enemy);
+            EnemyStep();
+        }
+
+        public void EnemyStep()
+        {
+            StartCoroutine(_enemy.EnemyAttacked());    
+        }
+
+        public void EnemyStepEnd()
+        {
+            _enemy.AttackDice();
+            _enemy.CheckDice(_player);
+            StepPlayer = true;
+        }
+
+        public bool CheckStep()
+        {
+            return StepPlayer; 
+        }
+
+        public void EnemyDie()
+        {
+            StepPlayer = false;
+        }
+
+        public void PlayerDie()
+        {
+            StepPlayer = false;
+        }
     }
 }

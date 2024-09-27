@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sideType: 1
-  _sidePower: 2
+  _sidePower: 1
 --- !u!1 &927165836591984895
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sideType: 1
-  _sidePower: 1
+  _sidePower: 2
 --- !u!1 &2247238528398139312
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,7 +207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sideType: 0
-  _sidePower: 2
+  _sidePower: 1
 --- !u!1 &3044522436227724765
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sideType: 2
-  _sidePower: 1
+  _sidePower: 2
 --- !u!1 &4797470787627865608
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sideType: 2
-  _sidePower: 2
+  _sidePower: 1
 --- !u!1 &7143602332207489621
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,7 +566,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sideType: 0
-  _sidePower: 1
+  _sidePower: 2
 --- !u!1001 &395111055951227621
 PrefabInstance:
   m_ObjectHideFlags: 0

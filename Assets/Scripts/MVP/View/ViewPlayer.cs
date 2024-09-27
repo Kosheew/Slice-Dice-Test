@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Game.MVP;
 
-namespace Game.MVP.Player
+namespace Game.MVP
 {
     public class ViewPlayer : View
     {
+        [SerializeField] private Text _countRerolText;
 
         [SerializeField] private Button _buttonRerol;
 
@@ -15,18 +13,21 @@ namespace Game.MVP.Player
 
         public override void Init(Presenter presenter)
         {
-            _precenter = presenter;
+            _presenter = presenter;
 
             _buttonRerol.onClick.AddListener(() => {
-                _precenter.ShakeDice();
+                _presenter.ShakeDice();
             });
 
             _buttonAttack.onClick.AddListener(() =>
             {
-                _precenter.SetAttack();
+                _presenter.SetAttack();
             });
+        }
 
-
+        public void UpdateCountRerol(int value)
+        {
+            _countRerolText.text = $"Count: {value}";
         }
     }
 }

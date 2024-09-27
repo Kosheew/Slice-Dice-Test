@@ -15,7 +15,10 @@ namespace DiceController
 
         private void OnTriggerEnter(Collider other)
         {
-            _dice.SetStatsDice(_sideType, _sidePower);
+            if (other.gameObject.CompareTag("Platform"))
+            {
+                _dice.SetStatsDice(_sideType, _sidePower);
+            }
         }
     }
 }
