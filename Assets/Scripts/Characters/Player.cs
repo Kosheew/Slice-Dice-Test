@@ -11,6 +11,8 @@ namespace Characters
 
         private CharacterSettings _enemy;
 
+        private bool _lock = true;
+
         public int CountRerol
         {
             private set { _maxRerol = value; }
@@ -25,13 +27,19 @@ namespace Characters
         }
 
         public override void RerolDice()
-        {
-            if (_maxRerol > 0 && _dice.RbDice.velocity == Vector3.zero)
+        {       
+            if (_maxRerol > 0 && _lock)
             {
                 base.RerolDice();
-
                 _maxRerol--;
+                _lock = false;
+                Invoke(nameof(UnlockRerol), 2);
             }
+        }
+
+        public void UnlockRerol()
+        {
+            _lock = true;
         }
 
         public override void AttackDice()

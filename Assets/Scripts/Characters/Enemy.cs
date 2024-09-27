@@ -32,8 +32,9 @@ namespace Characters
         {
             yield return new WaitForSeconds(3);
             RerolDice();
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(4);
             _fight.EnemyStepEnd();
+            RerolDice();
             yield break;
         }
     }

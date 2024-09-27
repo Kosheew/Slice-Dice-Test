@@ -7,48 +7,58 @@ namespace Game
     {
         private Enemy _enemy;
         private Player _player;
+        private Panels _panels;
 
-        private bool StepPlayer;
+        private bool _stepPlayer;
+        private bool _gameEnd;
 
         public void Init()
         {
-            StepPlayer = true;
+            _gameEnd = false;
+            _stepPlayer = true;
             _enemy = ServiceLocator.Current.Get<Enemy>();
             _player = ServiceLocator.Current.Get<Player>();
+            _panels = ServiceLocator.Current.Get<Panels>();
         }
 
         public void PlayerStep()
         {
-            StepPlayer = false;
-            _player.CheckDice(_enemy);
-            EnemyStep();
+            if (!_gameEnd)
+            {
+                _stepPlayer = false;
+                _player.CheckDice(_enemy);
+                EnemyStep();
+            }
         }
 
         public void EnemyStep()
         {
-            StartCoroutine(_enemy.EnemyAttacked());    
+            if(!_gameEnd)
+                StartCoroutine(_enemy.EnemyAttacked());    
         }
 
         public void EnemyStepEnd()
         {
             _enemy.AttackDice();
             _enemy.CheckDice(_player);
-            StepPlayer = true;
+            _stepPlayer = true;
         }
 
         public bool CheckStep()
         {
-            return StepPlayer; 
+            return _stepPlayer; 
         }
 
         public void EnemyDie()
         {
-            StepPlayer = false;
+            _gameEnd = true;
+            _panels.GameWin();
         }
 
         public void PlayerDie()
         {
-            StepPlayer = false;
+            _gameEnd = true;
+            _panels.GameLoose();
         }
     }
 }

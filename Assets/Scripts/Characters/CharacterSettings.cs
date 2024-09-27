@@ -1,9 +1,8 @@
 using DiceController;
 using Game;
 using Game.MVP;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 namespace Characters
 {
@@ -26,7 +25,7 @@ namespace Characters
                 {
                     _health = 0; 
                 } 
-                else if (value > _maxDefence)
+                else if (value > _maxHealth)
                 {
                     _health = _maxHealth;
                 }
@@ -58,10 +57,12 @@ namespace Characters
         }
 
         protected Fight _fight;
-        protected Dice _dice;
+        protected MyDice _dice;
         protected Presenter _presenter;
         protected AudioSource _audioSource;
         protected Animator _animator;
+
+        protected List<Dice> _diceList;
 
         public virtual void Init(Presenter presenter)
         {
@@ -73,10 +74,12 @@ namespace Characters
             _maxDefence = _defence;
             _presenter = presenter;
 
-            _dice = ServiceLocator.Current.Get<Dice>();
+            _dice = ServiceLocator.Current.Get<MyDice>();
             _fight = ServiceLocator.Current.Get<Fight>();
             _audioSource = GetComponent<AudioSource>();
             _animator = GetComponent<Animator>();
+
+            _diceList = _dice.DiceList;
 
             _presenter.SetDefence();
             _presenter.SetHealth();
@@ -84,7 +87,10 @@ namespace Characters
 
         public virtual void RerolDice()
         {
-            _dice.Rerol();
+            foreach (var dice in _diceList)
+            {
+                dice.Rerol();
+            }
         }
 
         public virtual void AttackDice()
@@ -92,35 +98,48 @@ namespace Characters
             _audioSource.PlayOneShot(_clipAttack);
             _animator.SetTrigger("isAttacked");        
         }
-        
+
         public void CheckDice(CharacterSettings character)
         {
-            if (_dice.CurrentType == SideTypes.Health)
+            foreach (var dice in _diceList)
             {
-                Health += _dice.PowerAttack;
-                _presenter.SetHealth();
-            }
-            else if (_dice.CurrentType == SideTypes.Protection)
-            {
-                Defence += _dice.PowerAttack;
-                _presenter.SetDefence();
-            }
-            else if (_dice.CurrentType == SideTypes.Attack)
-            {
-                character.TakeDamage(_dice.PowerAttack);
+                if (dice.CurrentType == SideTypes.Health)
+                {
+                    Health += dice.PowerAttack;
+                    _presenter.SetHealth();
+                }
+                else if (dice.CurrentType == SideTypes.Protection)
+                {
+                    Defence += dice.PowerAttack;
+                    _presenter.SetDefence();
+                }
+                else if (dice.CurrentType == SideTypes.Attack)
+                {
+                    character.TakeDamage(dice.PowerAttack);
+                }
+
             }
         }
 
         public virtual void TakeDamage(int damage)
         {
+            int currentDefence = Defence;
+
             if(_defence > 0)
             {
-                Defence -= damage;
+                currentDefence -= damage;
+                if (currentDefence < 0)
+                {
+                    Health += currentDefence;
+                    _presenter.SetHealth();
+                    currentDefence = 0;
+                }
+                Defence = currentDefence;
                 _presenter.SetDefence();
                 return;
             }
 
-            Health-= damage;
+            Health -= damage;
             _presenter.SetHealth();
             if (_health <= 0) 
             {
